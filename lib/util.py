@@ -482,7 +482,7 @@ def parse_URI(uri, on_pr=None):
         return {'address': uri}
 
     u = urllib.parse.urlparse(uri)
-    if u.scheme != 'bitcoin':
+    if u.scheme != 'cryptocoin':
         raise BaseException("Not a bitcoin URI")
     address = u.path
 
@@ -550,7 +550,7 @@ def create_URI(addr, amount, message):
         query.append('amount=%s'%format_satoshis_plain(amount))
     if message:
         query.append('message=%s'%urllib.parse.quote(message))
-    p = urllib.parse.ParseResult(scheme='bitcoin', netloc='', path=addr, params='', query='&'.join(query), fragment='')
+    p = urllib.parse.ParseResult(scheme='cryptocoin', netloc='', path=addr, params='', query='&'.join(query), fragment='')
     return urllib.parse.urlunparse(p)
 
 

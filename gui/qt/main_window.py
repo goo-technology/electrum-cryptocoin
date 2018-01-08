@@ -529,7 +529,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         d = self.network.get_donation_address()
         if d:
             host = self.network.get_parameters()[0]
-            self.pay_to_URI('bitcoin:%s?message=donation for %s'%(d, host))
+            self.pay_to_URI('cryptocoin:%s?message=donation for %s'%(d, host))
         else:
             self.show_error(_('No donation address for this server'))
 
@@ -636,11 +636,11 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def base_unit(self):
         assert self.decimal_point in [2, 5, 8]
         if self.decimal_point == 2:
-            return 'bits'
+            return 'uCTC'
         if self.decimal_point == 5:
-            return 'mBTC'
+            return 'mCTC'
         if self.decimal_point == 8:
-            return 'BTC'
+            return 'CTC'
         raise Exception('Unknown base unit')
 
     def connect_fields(self, window, btc_e, fiat_e, fee_e):
@@ -2167,7 +2167,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         if not data:
             return
         # if the user scanned a bitcoin URI
-        if str(data).startswith("bitcoin:"):
+        if str(data).startswith("cryptocoin:"):
             self.pay_to_URI(data)
             return
         # else if the user scanned an offline signed tx
@@ -2646,9 +2646,9 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         SSL_id_e.setReadOnly(True)
         id_widgets.append((SSL_id_label, SSL_id_e))
 
-        units = ['BTC', 'mBTC', 'bits']
+        units = ['CTC', 'mCTC', 'uCTC']
         msg = _('Base unit of your wallet.')\
-              + '\n1BTC=1000mBTC.\n' \
+              + '\n1CTC=1000mCTC.\n' \
               + _(' These settings affects the fields in the Send tab')+' '
         unit_label = HelpLabel(_('Base unit') + ':', msg)
         unit_combo = QComboBox()
@@ -2660,11 +2660,11 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
                 return
             edits = self.amount_e, self.fee_e, self.receive_amount_e
             amounts = [edit.get_amount() for edit in edits]
-            if unit_result == 'BTC':
+            if unit_result == 'CTC':
                 self.decimal_point = 8
-            elif unit_result == 'mBTC':
+            elif unit_result == 'mCTC':
                 self.decimal_point = 5
-            elif unit_result == 'bits':
+            elif unit_result == 'uCTC':
                 self.decimal_point = 2
             else:
                 raise Exception('Unknown base unit')
